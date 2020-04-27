@@ -283,9 +283,9 @@ def variable(value, dtype=None, name=None, constraint=None, sparse_weight=False)
     ret.bind(ndarray)
 
     if isinstance(value, np.ndarray):
-        ret._keras_shape = tuple([d if d != 0 else None for d in value.shape])
+        ret._keras_shape = tuple([d if d != 0 else -1 for d in value.shape])
     elif hasattr(value, 'shape'):
-        ret._keras_shape = tuple([d if d != 0 else None for d in map(int, value.shape)])
+        ret._keras_shape = tuple([d if d != 0 else -1 for d in map(int, value.shape)])
     ret._uses_learning_phase = False
 
     return ret
@@ -421,13 +421,13 @@ def placeholder(shape=None, ndim=None, dtype=None, sparse=False, name=None):
 
     if sparse:
         sym = _keras_variable(name, shape=shape, dtype=dtype, stype='csr')
-        sym._keras_shape = tuple([d if d != 0 else None for d in shape])
+        sym._keras_shape = tuple([d if d != 0 else -1 for d in shape])
         sym._mxnet_placeholder = True
         sym._uses_learning_phase = False
         return sym
 
     sym = _keras_variable(name, shape=shape, dtype=dtype, stype='default')
-    sym._keras_shape = tuple([d if d != 0 else None for d in shape])
+    sym._keras_shape = tuple([d if d != 0 else -1 for d in shape])
     sym._mxnet_placeholder = True
     sym._uses_learning_phase = False
     return sym
